@@ -1,4 +1,5 @@
 local L = Config.L
+local DB = Config.Database 
 
 CreateThread(function()
     Wait(2000)
@@ -11,8 +12,6 @@ CreateThread(function()
     print("^2[PEAK TEST]^7 pcall OK:", ok)
     print("^2[PEAK TEST]^7 RESULT:", json.encode(result))
 end)
-
-local DB = "qboxproject_cc2f75"
 
 local function Debug(msg)
     if Config.Debug then
@@ -47,7 +46,7 @@ local function getOnlinePlayers()
     for _, id in ipairs(GetPlayers()) do
         local p = exports.qbx_core:GetPlayer(tonumber(id))
         if p then
-            results[#results+1] = {
+            results[#results + 1] = {
                 source = tonumber(id),
                 citizenid = p.PlayerData.citizenid,
                 name = ("%s %s"):format(
@@ -116,14 +115,14 @@ lib.callback.register("peakhousemenu:search", function(source, query)
     query = query:lower()
     local results = {}
 
-    -- online
+    -- Online search
     for _, p in ipairs(getOnlinePlayers()) do
         if p.name:lower():find(query) or p.citizenid:lower():find(query) then
             results[#results+1] = p
         end
     end
 
-    -- offline
+    -- Offline profiles
     for _, row in ipairs(getPeakProfiles()) do
         if row.identifier:lower():find(query) then
             results[#results+1] = {
@@ -154,6 +153,7 @@ lib.callback.register("peakhousemenu:getHistory", function(source, cid)
 end)
 
 local function SendWebhook(adminName, adminId, targetCid, peakName, rpName, mode, amount)
+
     if not Config.Webhook or Config.Webhook == "" then
         Debug(L("debug_no_webhook"))
         return
@@ -183,7 +183,11 @@ end
 RegisterNetEvent("peakhousemenu:apply", function(data)
     local src = source
     if not IsAdmin(src) then
-        TriggerClientEvent("ox_lib:notify", src, { title = "Error", description = L("server_admin_denied"), type = "error" })
+        TriggerClientEvent("ox_lib:notify", src, { 
+            title = "Error", 
+            description = L("server_admin_denied"), 
+            type = "error" 
+        })
         return
     end
 
@@ -198,16 +202,22 @@ RegisterNetEvent("peakhousemenu:apply", function(data)
 
     Debug(L("debug_apply"):format(mode, amount, cid))
 
-    local prof = exports.oxmysql:executeSync("SELECT name FROM peak_houserobbery_profiles WHERE identifier = ?", { cid })
+    local prof = exports.oxmysql:executeSync(
+        "SELECT name FROM peak_houserobbery_profiles WHERE identifier = ?", 
+        { cid }
+    )
     local peakName = prof and prof[1] and prof[1].name or "Ukendt"
 
-    local rpInfo = exports.oxmysql:executeSync("SELECT charinfo FROM players WHERE citizenid = ?", { cid })
-    local rpName = "Ukendt"
+    local rpInfo = exports.oxmysql:executeSync(
+        "SELECT charinfo FROM players WHERE citizenid = ?", 
+        { cid }
+    )
 
+    local rpName = "Ukendt"
     if rpInfo and rpInfo[1] and rpInfo[1].charinfo then
-        local ok, cinfo = pcall(json.decode, rpInfo[1].charinfo)
-        if ok and cinfo.firstname then
-            rpName = ("%s %s"):format(cinfo.firstname, cinfo.lastname or "")
+        local ok, char = pcall(json.decode, rpInfo[1].charinfo)
+        if ok and char.firstname then
+            rpName = ("%s %s"):format(char.firstname, char.lastname or "")
         end
     end
 
@@ -220,9 +230,12 @@ RegisterNetEvent("peakhousemenu:apply", function(data)
     SendWebhook(GetPlayerName(src), src, cid, peakName, rpName, mode, amount)
 
     local verb = mode == "add" and L("server_apply_add") or L("server_apply_remove")
+
     TriggerClientEvent("ox_lib:notify", src, {
         title = L("coins_updated"),
         description = (L("server_apply_success")):format(verb, cid),
         type = "success"
     })
 end)
+
+print("^2[PEAK ADMIN]^7 server.lua ready ✓")
