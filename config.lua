@@ -20,7 +20,7 @@ Config.RequiredAce = "peak.admin"
 -- DATABASE
 ------------------------------------------------------------
 -- MUST MATCH YOUR DATABASE NAME EXACTLY
-Config.Database = "qboxproject_cc2f75"
+Config.Database = "your-db-name-here"
 
 ------------------------------------------------------------
 -- DEBUG MODE
@@ -30,7 +30,7 @@ Config.Debug = true
 ------------------------------------------------------------
 -- DISCORD WEBHOOK
 ------------------------------------------------------------
-Config.Webhook = "https://discord.com/api/webhooks/1445084157662466079/5hUQtac-i0uQ5ET3Xd-wnfCvNtDZv9EocMBaJfaNOgDlp-1pTp7sQgAXE0XmdFclCBFD" 
+Config.Webhook = "YOUR-WEBHOOK-HERE" 
 -- Example:
 -- "https://discord.com/api/webhooks/XXXXXXXX/XXXXXXXXXXXX"
 
@@ -188,3 +188,4 @@ local function L(key)
 end
 
 Config.L = L
+
