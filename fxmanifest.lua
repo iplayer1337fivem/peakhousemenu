@@ -4,7 +4,7 @@ game 'gta5'
 name 'peakhousemenu'
 author 'ARP'
 description 'Admin coin manager for Peak HouseRobbery'
-version '1.0.1'
+version '1.0.2'
 
 shared_scripts {
     '@ox_lib/init.lua',
@@ -14,3 +14,4 @@ shared_scripts {
 client_script 'client.lua'
 
 server_script 'server.lua'
+
