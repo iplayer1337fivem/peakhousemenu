@@ -1,22 +1,52 @@
 Config = {}
 
-Config.AllowedGroups = {    -- add_ace group.admin peak.admin allow
-    admin = true,           -- add_ace identifier.steam:11000010xxxxxxx peak.admin allow
-    superadmin = true,      -- add_ace identifier.discord:xxxxxxxxxxxxxxx peak.admin allow
+------------------------------------------------------------
+-- ADMIN PERMISSIONS
+------------------------------------------------------------
+Config.AllowedGroups = {        -- QBOX groups
+    admin = true,
+    superadmin = true,
     god = true,
+    owner = true,
 }
 
-Config.RequiredAce = "peak.admin"  --/peakhousemenu
+Config.RequiredAce = "peak.admin"  
+-- Usage examples:
+-- add_ace group.admin peak.admin allow
+-- add_ace identifier.steam:110000xxxxxxxx peak.admin allow
+-- add_ace identifier.discord:xxxxxxxxxxxxx peak.admin allow
 
+------------------------------------------------------------
+-- DATABASE
+------------------------------------------------------------
+-- MUST MATCH YOUR DATABASE NAME EXACTLY
+Config.Database = "qboxproject_cc2f75"
+
+------------------------------------------------------------
+-- DEBUG MODE
+------------------------------------------------------------
 Config.Debug = true
 
--- Webhook URL
-Config.Webhook = ""
+------------------------------------------------------------
+-- DISCORD WEBHOOK
+------------------------------------------------------------
+Config.Webhook = "https://discord.com/api/webhooks/1445084157662466079/5hUQtac-i0uQ5ET3Xd-wnfCvNtDZv9EocMBaJfaNOgDlp-1pTp7sQgAXE0XmdFclCBFD" 
+-- Example:
+-- "https://discord.com/api/webhooks/XXXXXXXX/XXXXXXXXXXXX"
 
-Config.Locale = "en" -- "da" / "en" / whatever you add later
+------------------------------------------------------------
+-- LOCALE SELECTION
+------------------------------------------------------------
+Config.Locale = "en"   -- "da" or "en" (or add more below)
 
+------------------------------------------------------------
+-- LOCALIZATION DICTIONARIES
+------------------------------------------------------------
 Config.Locales = {}
 
+------------------------------------------------------------
+-- 🇩🇰 DANISH
+------------------------------------------------------------
 Config.Locales["da"] = {
     menu_title = "Peak HouseRobbery – Admin Panel",
     search_player = "🔍 Søg spiller",
@@ -54,12 +84,14 @@ Config.Locales["da"] = {
 
     search_title = "Søg spiller",
     search_label = "Navn / CID / ID",
+
     -- SERVER MESSAGES
     server_admin_denied = "Du har ikke adgang til dette.",
     server_invalid_data = "Ugyldige data modtaget.",
     server_apply_success = "Opdaterede %s coins for %s.",
     server_apply_add = "Tilføjede",
     server_apply_remove = "Fjernede",
+
     -- WEBHOOK
     webhook_title = "Peak HouseRobbery – Coin Update",
     webhook_field_admin = "Admin",
@@ -70,6 +102,7 @@ Config.Locales["da"] = {
     webhook_field_amount = "Antal",
     webhook_action_add = "Tilføjede Coins",
     webhook_action_remove = "Fjernede Coins",
+
     -- DEBUG
     debug_database_test = "Tester database-forbindelse...",
     debug_admin_check = "ADMIN CHECK — PLAYER GROUP:",
@@ -78,6 +111,9 @@ Config.Locales["da"] = {
     debug_invalid_apply = "apply -> invalid data",
 }
 
+------------------------------------------------------------
+-- 🇬🇧 ENGLISH
+------------------------------------------------------------
 Config.Locales["en"] = {
     menu_title = "Peak HouseRobbery – Admin Panel",
     search_player = "🔍 Search Player",
@@ -142,11 +178,13 @@ Config.Locales["en"] = {
     debug_invalid_apply = "apply -> invalid data",
 }
 
-
--- Helper (ingen ændringer nødvendige)
+------------------------------------------------------------
+-- LOCALE HELPER
+------------------------------------------------------------
 local function L(key)
     local locale = Config.Locale or "da"
-    return Config.Locales[locale][key] or ("MISSING LOCALE: "..key)
+    local lang = Config.Locales[locale]
+    return lang[key] or ("MISSING LOCALE: " .. key)
 end
 
 Config.L = L
